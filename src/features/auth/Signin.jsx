@@ -1,22 +1,25 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useLogin } from "@/hooks/useLogin";
 
 function Signin() {
-  const [tab, setTab] = useState("signin");
   const [keepLogged, setKeepLogged] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { pathname } = useLocation();
+  const { errors, submitting, register, handleSubmit, onSubmit } = useLogin();
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white rounded-3xl p-8 relative shadow-xl border border-gray-100">
 
         {/* Close button */}
-        <button className="absolute top-5 right-5 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors">
+        <Link
+          to="/"
+          className="absolute top-5 right-5 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
             <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
           </svg>
-        </button>
+        </Link>
 
         {/* Tab switcher */}
         <div className="inline-flex bg-gray-100 rounded-full p-1 mb-8">
@@ -42,44 +45,62 @@ function Signin() {
         <p className="text-sm text-gray-400 mb-6">Enter your email and password to sign in!</p>
 
         {/* Form */}
-        <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3">
 
           {/* Email */}
-          <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 flex-shrink-0">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M22 6l-10 7L2 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
-            />
+          <div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 shrink-0">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M22 6l-10 7L2 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                name="email"
+                {...register("email")}
+              />
+            </div>
+            {errors.password && (
+              <p className="text-red-400 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Password */}
-          <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 flex-shrink-0">
-              <rect x="3" y="11" width="18" height="11" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M7 11V7a5 5 0 0110 0v4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
-            />
-            <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-gray-400 hover:text-gray-600 transition-colors">
-              {showPassword ? (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
-                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-            </button>
+          <div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 shrink-0">
+                <rect x="3" y="11" width="18" height="11" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7 11V7a5 5 0 0110 0v4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                name="password"
+                {...register("password")}
+              />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                {showPassword ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-red-400 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Keep logged + Forgot */}
@@ -87,8 +108,7 @@ function Signin() {
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={keepLogged}
-                onChange={() => setKeepLogged(!keepLogged)}
+                {...register("remember")}
                 className="w-4 h-4 rounded border-gray-300 accent-indigo-500"
               />
               <span className="text-sm text-gray-500">Keep me logged in</span>
@@ -97,8 +117,13 @@ function Signin() {
           </div>
 
           {/* Submit */}
-          <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3.5 rounded-xl text-sm transition-colors mt-1">
-            Sign In
+
+          <button
+            disabled={submitting}
+            type="submit"
+            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3.5 rounded-xl text-sm transition-colors mt-1"
+          >
+            {submitting ? "Signing in..." : "Sign in"}
           </button>
 
           {/* Divider */}
@@ -128,7 +153,9 @@ function Signin() {
           {/* Terms */}
           <p className="text-xs text-gray-400 text-center mt-1">
             Don't have an account?{" "}
-            <a href="#" className="text-indigo-500 font-medium hover:underline">Sign Up</a>
+            <Link to="/auth/signup" className="text-indigo-500 font-medium hover:underline">
+              Sign Up
+            </Link>
           </p>
 
         </form>

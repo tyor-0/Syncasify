@@ -1,11 +1,37 @@
+import axiosInstance from "@/services/instance";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { registerSchema } from "@/services/registerSchema";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Register() {
-  const [tab, setTab] = useState("signup");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-   const { pathname } = useLocation();
+  const { pathname } = useLocation();
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(registerSchema)
+  })
+
+  async function onSubmit(data) {
+    setLoading(true)
+    
+    try {
+      const res = await axiosInstance.post("/user/register", data)
+      localStorage.setItem("token", res.data.token)
+      alert("Registration Successful")
+      navigate("/auth")
+    } catch (error) {
+      // console.log(error);
+      alert(error.response?.data?.message || "Registration failed. Please try again.")
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
@@ -41,108 +67,178 @@ function Register() {
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Create an account</h2>
 
         {/* Form */}
-        <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3">
 
           {/* First + Last name */}
           <div className="flex gap-3">
-            <input
-              type="text"
-              placeholder="First name"
-              className="flex-1 bg-gray-50 border border-gray-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition"
-            />
-            <input
-              type="text"
-              placeholder="Last name"
-              className="flex-1 bg-gray-50 border border-gray-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition"
-            />
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="First name"
+                className="flex-1 bg-gray-50 border border-gray-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition"
+                required
+                name="firstName"
+                {...register("firstName")}
+              />
+              <p className="text-red-500 text-sm">{errors.firstName?.message}</p>
+            </div>
+
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Last name"
+                className="flex-1 bg-gray-50 border border-gray-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition"
+                required
+                name="lastName"
+                {...register("lastName")}
+              />
+              <p className="text-red-500 text-sm">{errors.lastName?.message}</p>
+            </div>
+
           </div>
 
           {/* Email */}
-          <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 flex-shrink-0">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M22 6l-10 7L2 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
-            />
+          <div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 shrink-0">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M22 6l-10 7L2 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                required
+                name="email"
+                {...register("email")}
+              />
+            </div>
+            <p className="text-red-500 text-sm">{errors.email?.message}</p>
           </div>
 
           {/* Phone */}
-          <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
-            <span className="text-base">🇺🇸</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3 text-gray-400">
-              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <div className="w-px h-4 bg-gray-300 mx-1" />
-            <input
-              type="tel"
-              placeholder="(775) 351-6501"
-              className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
-            />
+          <div>
+            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
+              <span className="text-base">🇺🇸</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3 text-gray-400">
+                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <div className="w-px h-4 bg-gray-300 mx-1" />
+              <input
+                type="tel"
+                placeholder="(775) 351-6501"
+                className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                required
+                name="number"
+                {...register("number")}
+              />
+            </div>
+            <p className="text-red-500 text-sm">{errors.number?.message}</p>
           </div>
 
           {/* Password */}
-          <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 flex-shrink-0">
-              <rect x="3" y="11" width="18" height="11" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M7 11V7a5 5 0 0110 0v4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
-            />
-            <button onClick={() => setShowPassword(!showPassword)} className="text-gray-400 hover:text-gray-600 transition-colors">
-              {showPassword ? (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
-                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-            </button>
+          <div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 shrink-0">
+                <rect x="3" y="11" width="18" height="11" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7 11V7a5 5 0 0110 0v4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                {...register("password")}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {showPassword ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </button>
+
+            </div>
+
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Confirm Password */}
-          <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 flex-shrink-0">
-              <rect x="3" y="11" width="18" height="11" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M7 11V7a5 5 0 0110 0v4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <input
-              type={showConfirm ? "text" : "password"}
-              placeholder="Confirm password"
-              className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
-            />
-            <button onClick={() => setShowConfirm(!showConfirm)} className="text-gray-400 hover:text-gray-600 transition-colors">
-              {showConfirm ? (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
-                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-            </button>
+          <div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 rounded-xl px-4 py-3 transition">
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-gray-400 shrink-0">
+                <rect x="3" y="11" width="18" height="11" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7 11V7a5 5 0 0110 0v4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+
+              <input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm password"
+                className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
+                {...register("confirmPassword")}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {showConfirm ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </button>
+
+            </div>
+
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
 
           {/* Submit */}
-          <button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3.5 rounded-xl text-sm transition-colors mt-1">
-            Create an account
+          <button
+            disabled={loading}
+            type="submit"
+            className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3.5 rounded-xl text-sm transition-colors mt-1">
+            {loading ? "Signing Up..." : "Sign up"}
           </button>
+
+          <p className="text-center py-8">
+            Already have an account?{" "}
+            <Link to="/auth" className="text-indigo-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-1">
             <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 tracking-wide">OR SIGN IN WITH</span>
+            <span className="text-xs text-gray-400 tracking-wide">OR SIGN UP WITH</span>
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
