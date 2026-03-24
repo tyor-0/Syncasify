@@ -213,16 +213,27 @@ const s = {
     background: "#1a1a18", color: "#fff",
     fontSize: 13, fontWeight: 500, cursor: "pointer",
   },
+
+  // ✅ KEEP THESE (used in your UI)
   searchBtn: {
-    padding: "8px 14px", borderRadius: 8,
-    border: "none", background: "#1a1a18",
-    color: "#fff", fontSize: 13, cursor: "pointer",
+    padding: "8px 14px",
+    borderRadius: 8,
+    border: "none",
+    background: "#1a1a18",
+    color: "#fff",
+    fontSize: 13,
+    cursor: "pointer",
   },
   refetchBtn: {
-    padding: "8px 14px", borderRadius: 8,
-    border: "0.5px solid #d0cec8", background: "transparent",
-    color: "#555", fontSize: 13, cursor: "pointer",
+    padding: "8px 14px",
+    borderRadius: 8,
+    border: "0.5px solid #d0cec8",
+    background: "transparent",
+    color: "#555",
+    fontSize: 13,
+    cursor: "pointer",
   },
+
   metricsGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
@@ -279,16 +290,7 @@ const s = {
     border: "0.5px solid #d0cec8", background: "transparent",
     cursor: "pointer", color: "#555",
   },
-  searchBtn: {
-    padding: "8px 16px", borderRadius: 8, border: "none",
-    background: "#1a1a18", color: "#fff",
-    fontSize: 13, fontWeight: 500, cursor: "pointer",
-  },
-  refetchBtn: {
-    padding: "8px 14px", borderRadius: 8,
-    border: "0.5px solid #d0cec8", background: "transparent",
-    color: "#555", fontSize: 13, cursor: "pointer",
-  },
+
   spinner: {
     width: 28, height: 28, borderRadius: "50%",
     border: "2px solid #e5e3db",
