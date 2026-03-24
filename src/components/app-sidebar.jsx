@@ -209,7 +209,7 @@ export function AppSidebar({ onTitleChange, ...props
 
       <SidebarContent>
         <NavMain items={data.navMain} onTitleChange={onTitleChange} />
-        <NavDocuments items={data.inventory} />
+        <NavDocuments items={data.inventory} onTitleChange={onTitleChange} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
 

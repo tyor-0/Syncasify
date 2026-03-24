@@ -7,38 +7,18 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import data from "./data.json"
 import { useState } from "react"
 
-export default function Stock() {
-  const [activeTitle, setActiveTitle] = useState("Home");
-
+function Stock() {
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      }}
-    >
-      <AppSidebar variant="inset" onTitleChange={setActiveTitle}/>
-
-      <SidebarInset>
-        <SiteHeader title={activeTitle} />
-
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              
-              <SectionCards />
-
-              <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
-              </div>
-
-              <DataTable data={data} />
-
-            </div>
-          </div>
-        </div>
-      </SidebarInset>
-
-    </SidebarProvider>
+    <div className="flex flex-col items-center justify-center h-[60vh] gap-3">
+      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-2xl">
+        🚧
+      </div>
+      <h2 className="text-lg font-semibold text-foreground">Coming Soon</h2>
+      <p className="text-sm text-muted-foreground text-center max-w-sm">
+        This page is currently under construction. Check back soon.
+      </p>
+    </div>
   )
 }
+
+export default Stock;

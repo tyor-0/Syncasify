@@ -13,10 +13,12 @@ export const useGetAllCustomers = () => {
       const res = await axiosInstance.get(
         `/crm/customers?search=${encodeURIComponent(search)}`
       );
-      console.log(res.data);
-      setCustomers(res.data.customers || res.data);
+      // API returns { customers: [...] }
+      const raw = res.data?.customers ?? res.data;
+      setCustomers(Array.isArray(raw) ? raw : []);
     } catch (error) {
       console.log(error);
+      setCustomers([]);
     } finally {
       setLoading(false);
     }

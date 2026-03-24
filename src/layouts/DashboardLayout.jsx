@@ -5,8 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { useState } from "react"
 import { Outlet } from "react-router-dom"
 
-function AdminLayout() {
-  const [activeTitle, setActiveTitle] = useState("Admin")
+function DashboardLayout() {
+  const [activeTitle, setActiveTitle] = useState("Home")
 
   return (
     <TooltipProvider>
@@ -26,4 +26,4 @@ function AdminLayout() {
   )
 }
 
-export default AdminLayout
+export default DashboardLayout

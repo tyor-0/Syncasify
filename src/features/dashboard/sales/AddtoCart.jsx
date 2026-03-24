@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCreateSale } from "@/hooks/useCreateSale";
-import ProductDetailModal from "./ProductDetailModal";
+import ProductDetailModal from "./Productdetailmodal";
 
 // This page is navigated to from the products table via:
 // navigate("/admin/sales/add-to-carts", { state: { product: row.original } })

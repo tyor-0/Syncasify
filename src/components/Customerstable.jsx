@@ -9,29 +9,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { z } from "zod"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { Button } from "@/components/ui/button"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -56,102 +41,15 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsRightIcon,
-  MoreHorizontalIcon,
 } from "lucide-react"
-import { useGetAllCustomers } from "@/hooks/use-getallcustomer"
 import { useNavigate } from "react-router-dom"
+import { useGetAllCustomers } from "@/hooks/use-getallcustomer"
+import { getColumns } from "@/services/helper"
 
-export const schema = z.object({
-  _id: z.string(),
-  name: z.string(),
-  email: z.string().optional(),
-  phone: z.string(),
-  amountSpent: z.number().optional(),
-})
-
-function formatCurrency(val) {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    maximumFractionDigits: 0,
-  }).format(val || 0)
-}
-
-// ── Actions dropdown ────────────────────────────────────────────────────────
-function ActionsCell({ customer }) {
-  const router = useNavigate()
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="size-8">
-          <MoreHorizontalIcon className="size-4" />
-          <span className="sr-only">Open menu</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
-        <DropdownMenuItem
-          onClick={() => router(`/admin/crm/customers/${customer._id}`)}
-        >
-          View Details
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => router(`/admin/crm/customers/${customer._id}/edit`)}
-        >
-          Edit Details
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive focus:text-destructive">
-          Delete Customer
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-
-// ── Columns ─────────────────────────────────────────────────────────────────
-const columns = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <TableCellViewer item={row.original} />,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.email || "—"}</span>
-    ),
-  },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.phone}</span>
-    ),
-  },
-  {
-    accessorKey: "amountSpent",
-    header: () => <div className="text-right">Amount Spent</div>,
-    cell: ({ row }) => (
-      <div className="text-right font-medium">
-        {formatCurrency(row.original.amountSpent)}
-      </div>
-    ),
-  },
-  {
-    id: "actions",
-    header: "",
-    cell: ({ row }) => <ActionsCell customer={row.original} />,
-    enableHiding: false,
-  },
-]
-
-// ── Main table ───────────────────────────────────────────────────────────────
 export function CustomersTable() {
   const { customers, loading, query, handleQuery, handleSearch } = useGetAllCustomers()
   const router = useNavigate()
+  const columns = React.useMemo(() => getColumns(), [])
 
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [columnFilters, setColumnFilters] = React.useState([])
@@ -209,10 +107,7 @@ export function CustomersTable() {
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button
-            size="sm"
-            onClick={() => router("/admin/crm/customers/new")}
-          >
+          <Button size="sm" onClick={() => router("/admin/crm/customers/new")}>
             <PlusIcon />
             <span className="hidden lg:inline">Add New</span>
           </Button>
@@ -344,55 +239,5 @@ export function CustomersTable() {
 
       </div>
     </div>
-  )
-}
-
-// ── Drawer viewer ────────────────────────────────────────────────────────────
-function TableCellViewer({ item }) {
-  const isMobile = useIsMobile()
-
-  return (
-    <Drawer direction={isMobile ? "bottom" : "right"}>
-      <DrawerTrigger asChild>
-        <Button variant="link" className="w-fit px-0 text-left text-foreground">
-          {item.name}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="gap-1">
-          <DrawerTitle>{item.name}</DrawerTitle>
-          <DrawerDescription>Customer details</DrawerDescription>
-        </DrawerHeader>
-        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" defaultValue={item.name} readOnly />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" defaultValue={item.email || "—"} readOnly />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" defaultValue={item.phone} readOnly />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="amountSpent">Amount Spent</Label>
-              <Input
-                id="amountSpent"
-                defaultValue={formatCurrency(item.amountSpent)}
-                readOnly
-              />
-            </div>
-          </div>
-        </div>
-        <DrawerFooter>
-          <DrawerClose asChild>
-            <Button variant="outline">Close</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
   )
 }

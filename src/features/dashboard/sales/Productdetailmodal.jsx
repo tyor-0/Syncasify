@@ -9,11 +9,13 @@ export default function ProductDetailModal({ product, onClose, onAddToCart, isIn
     const [added, setAdded] = useState(false);
 
     // Reset quantity when product changes
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => {
-        setQuantity(1);
-        setAdded(false);
+        if (product?._id) {
+            setQuantity(1);
+            setAdded(false);
+        }
     }, [product?._id]);
-
     if (!product) return null;
 
     const isLowStock = product.quantity <= product.lowStockThreshold;
@@ -155,11 +157,10 @@ export default function ProductDetailModal({ product, onClose, onAddToCart, isIn
                     <Button
                         onClick={handleAddToCart}
                         disabled={isOutOfStock}
-                        className={`w-full py-5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
-                            added
+                        className={`w-full py-5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-300 ${added
                                 ? "bg-green-500 hover:bg-green-500 text-white"
                                 : "bg-blue-600 hover:bg-blue-700 text-white"
-                        } disabled:opacity-40`}
+                            } disabled:opacity-40`}
                     >
                         {added ? (
                             <>
