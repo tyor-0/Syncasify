@@ -24,12 +24,15 @@ function CtaBanner() {
           <p className="text-sm text-indigo-200 leading-relaxed mb-8 max-w-md mx-auto">
             Everything you need to know before getting started — clear answers, no confusion.
           </p>
-          <Link
-            to="/auth"
-            className="bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 shadow-sm"
-          >
-            Get Started
-          </Link>
+          <div>
+            <Link
+              to="/auth"
+              className="bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 shadow-sm"
+            >
+              Get Started
+            </Link>
+          </div>
+
         </div>
       </div>
     </div>
