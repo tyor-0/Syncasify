@@ -18,7 +18,7 @@ const testimonials = [
     iconColor: "bg-green-500",
     icon: "↗",
     title: "Team Productivity Win",
-    body: "Our team saves hours every day. Agents helped us automate tasks we didn't even know we could. no devs needed at all.",
+    body: "Our team saves hours every day. Agents helped us automate tasks we didn't even know we could. No devs needed at all.",
     featured: true,
   },
   {
@@ -28,7 +28,7 @@ const testimonials = [
     iconColor: "bg-yellow-400",
     icon: "↓",
     title: "Boosted Workflow",
-    body: "Bizvance gives us full control over our finances and clients. Agents helped us automate Clean dashboard, powerful features.",
+    body: "Bizvance gives us full control over our finances and clients. Clean dashboard, powerful features.",
     featured: true,
   },
   {
@@ -38,7 +38,7 @@ const testimonials = [
     iconColor: "bg-gray-200",
     icon: "○",
     title: "Massive Time Saver",
-    body: "Clean dashboard, powerful features, very easy to use. Clean dashboard, powerful features, and very easy.",
+    body: "Clean dashboard, powerful features, very easy to use.",
     featured: false,
   },
   {
@@ -48,7 +48,7 @@ const testimonials = [
     iconColor: "bg-yellow-400",
     icon: "↓",
     title: "Boosted Workflow",
-    body: "Agents helped us automate tasks we didn't even know we could. Agents helped us automate Clean dashboard, powerful.",
+    body: "Agents helped us automate tasks we didn't even know we could. Clean dashboard, powerful.",
     featured: false,
   },
   {
@@ -58,7 +58,7 @@ const testimonials = [
     iconColor: "bg-green-500",
     icon: "↗",
     title: "Team Productivity Win",
-    body: "Our team saves hours every day. Agents helped us automate tasks we didn't even know we could. no devs needed at all.",
+    body: "Our team saves hours every day. No devs needed at all.",
     featured: true,
   },
   {
@@ -68,7 +68,7 @@ const testimonials = [
     iconColor: "bg-gray-900",
     icon: "+",
     title: "Zero Setup Time",
-    body: "Bizvance gives us full control over our finances and clients. Bizvance gives us full control over our finances and clients.",
+    body: "Bizvance gives us full control over our finances and clients.",
     featured: true,
   },
   {
@@ -78,15 +78,14 @@ const testimonials = [
     iconColor: "bg-gray-200",
     icon: "○",
     title: "Team Productivity Win",
-    body: "Our team saves hours every day. Agents helped us automate tasks we didn't even know we could. no devs needed at all.",
+    body: "Our team saves hours every day. Agents helped us automate tasks we didn't even know we could.",
     featured: false,
   },
 ];
 
 function TestimonialCard({ testimonial }) {
   return (
-    <div className={`bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-3 break-inside-avoid mb-4 ${testimonial.featured ? "opacity-100" : "opacity-60"}`}>
-      {/* Author row */}
+    <div className={`bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-3 mb-4 ${testimonial.featured ? "opacity-100" : "opacity-60"}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className={`w-8 h-8 rounded-full ${testimonial.avatarBg} flex-shrink-0`} />
@@ -99,8 +98,6 @@ function TestimonialCard({ testimonial }) {
           {testimonial.icon}
         </div>
       </div>
-
-      {/* Content */}
       <div>
         <div className="text-sm font-bold text-gray-900 mb-1">{testimonial.title}</div>
         <p className="text-xs text-gray-400 leading-relaxed">{testimonial.body}</p>
@@ -116,14 +113,12 @@ function Testimonial() {
   const col4 = [testimonials[3], testimonials[7]];
 
   return (
-    <section className="bg-white py-20 px-4 overflow-hidden">
-
-      {/* Header */}
+    <section className="bg-white py-16 px-4 overflow-hidden">
       <div className="text-center mb-14 max-w-xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 text-xs font-semibold text-gray-500 mb-5 shadow-sm">
           LOVED BY 200+ TEAMS WORLDWIDE
         </div>
-        <h2 className="text-4xl font-extrabold text-gray-900 leading-tight mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4">
           Trusted by growing <br /> businesses worldwide
         </h2>
         <p className="text-sm text-gray-400 leading-relaxed">
@@ -131,29 +126,20 @@ function Testimonial() {
         </p>
       </div>
 
-      {/* Masonry-style 4-column grid */}
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 items-start">
-
-        {/* Column 1 — starts lower */}
-        <div className="flex flex-col mt-10">
+      {/* 1 col on mobile, 2 col on sm, 4 col on md+ */}
+      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-start">
+        <div className="flex flex-col md:mt-10">
           {col1.map((t, i) => <TestimonialCard key={i} testimonial={t} />)}
         </div>
-
-        {/* Column 2 — starts at top */}
         <div className="flex flex-col">
           {col2.map((t, i) => <TestimonialCard key={i} testimonial={t} />)}
         </div>
-
-        {/* Column 3 — starts a bit lower */}
-        <div className="flex flex-col mt-6">
+        <div className="flex flex-col md:mt-6">
           {col3.map((t, i) => <TestimonialCard key={i} testimonial={t} />)}
         </div>
-
-        {/* Column 4 — starts at top */}
         <div className="flex flex-col">
           {col4.map((t, i) => <TestimonialCard key={i} testimonial={t} />)}
         </div>
-
       </div>
     </section>
   );

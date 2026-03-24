@@ -10,70 +10,55 @@ function PlusIcon() {
   );
 }
 
-function ReasonCard({ stat, description, offsetTop }) {
+function ReasonCard({ stat, description }) {
   return (
     <div
       className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col justify-between"
       style={{
         backgroundImage: "radial-gradient(circle, #e0e7ff 1px, transparent 1px)",
         backgroundSize: "18px 18px",
-        minHeight: "180px",
-        marginTop: offsetTop || "0px",
+        minHeight: "160px",
       }}
     >
-      {/* Top row */}
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-base font-bold text-gray-900 leading-snug">{stat}</h3>
         <PlusIcon />
       </div>
-
-      {/* Description at bottom */}
-      <p className="text-xs text-gray-400 leading-relaxed mt-6">{description}</p>
+      <p className="text-xs text-gray-400 leading-relaxed mt-4">{description}</p>
     </div>
   );
 }
 
 function Benefit() {
   return (
-    <section className="bg-white py-20 px-4">
-
-      {/* Header */}
-      <div className="text-center mb-14 max-w-lg mx-auto">
+    <section className="bg-white py-16 px-4">
+      <div className="text-center mb-12 max-w-lg mx-auto">
         <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 text-xs font-semibold text-gray-500 mb-5 shadow-sm">
-          Why Chose us
+          Why Choose us
         </div>
-        <h2 className="text-4xl font-extrabold text-gray-900 leading-tight">
-          The Smarter Way to Run <br /> Your Business
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
+          The Smarter Way to Run <br className="hidden sm:block" /> Your Business
         </h2>
       </div>
 
-      {/* Cards — staggered layout */}
-      <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 items-start">
-
+      {/* Responsive grid — 1 col mobile, 2 col tablet, 4 col desktop */}
+      <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ReasonCard
           stat="40% Faster Workflows"
-          description="Automate invoices, remind and daily tasks to reduce"
-          offsetTop="0px"
+          description="Automate invoices, reminders and daily tasks to reduce manual work."
         />
-
         <ReasonCard
           stat="3× Better Team Coordination"
-          description="Keep everyone aligned with shared access, real-time"
-          offsetTop="48px"
+          description="Keep everyone aligned with shared access and real-time updates."
         />
-
         <ReasonCard
           stat="100% Real-Time Visibility"
-          description="Track income, expenses, and performance instantly"
-          offsetTop="0px"
+          description="Track income, expenses, and performance instantly from one place."
         />
-
         <ReasonCard
           stat="10k+ Businesses"
-          description="Startups, agencies, growing and teams relyations."
-          offsetTop="48px"
+          description="Startups, agencies, and growing teams rely on us every day."
         />
-
       </div>
     </section>
   );
