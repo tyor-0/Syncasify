@@ -1,7 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function CtaBanner() {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-5xl mx-auto px-4">
       <div
@@ -25,13 +27,11 @@ function CtaBanner() {
             Everything you need to know before getting started — clear answers, no confusion.
           </p>
 
-          <Link
-            to="/auth"
+          <button
             className="bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 shadow-sm"
-          >
+            onClick={() => navigate("/auth")}>
             Get Started
-          </Link>
-
+          </button>
 
         </div>
       </div>
