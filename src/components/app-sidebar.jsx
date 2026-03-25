@@ -42,7 +42,7 @@ const data = {
       url: "/dashboard/sales",
       icon: ListIcon,
       items: [
-        { title: "Completed sales", url: "/dashboard/sales/compeleted-sales" },
+        { title: "Completed sales", url: "/dashboard/sales/completed-sales" },
         { title: "Refunds", url: "/dashboard/sales/refunds" },
         { title: "Saved carts", url: "/dashboard/sales/saved-carts" },
       ],

@@ -100,6 +100,8 @@ export function route() {
         { path: 'all-items', Component: AllProducts },
         { path: 'categories', Component: Categories },
         { path: 'stock-management', Component: Stock },
+        { path: 'sales/completed-sales', Component: ComingSoon },
+        { path: 'sales/refunds', Component: ComingSoon },
 
         // Full POS
         { path: 'sales', children: salesChildren },

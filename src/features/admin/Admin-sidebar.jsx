@@ -42,7 +42,7 @@ const data = {
       url: "/admin/sales",
       icon: ListIcon,
       items: [
-        { title: "Completed sales", url: "/admin/sales/compeleted-sales" },
+        { title: "Completed sales", url: "/admin/sales/completed-sales" },
         { title: "Refunds", url: "/admin/sales/refunds" },
         { title: "Saved carts", url: "/admin/sales/saved-carts" },
       ],
